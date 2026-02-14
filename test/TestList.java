@@ -4,8 +4,10 @@ import static org.junit.Assert.assertEquals;
 import seanList.GenericAList;
 import seanList.GenericSList;
 import seanList.SeanList;
+import time.Timer;
 
 public class TestList {
+    Timer time = new Timer();
     public enum ListType {AL, SLL};
     private SeanList<Integer> list;
 
@@ -98,11 +100,13 @@ public class TestList {
 
     @Test
     public void testRemove() {
+        time.startTimer();
         makeListAddLast();
         list.print();
         int exp = 5;
         int act = list.remove(5);
         list.print();
+        time.endTimer();
         assertEquals(exp, act);
     }
 }

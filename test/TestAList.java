@@ -3,9 +3,11 @@ import static org.junit.Assert.assertEquals;
 
 import seanList.GenericAList;
 import seanList.SeanList;
+import time.Timer;
 
 public class TestAList {
 
+    private Timer time = new Timer();
     private SeanList<Integer> list;
 
     private void makeList() {
@@ -43,16 +45,20 @@ public class TestAList {
 
     @Test
     public void testShrink() {
+        time.startTimer();
         makeList();
-        fillLast(1000);
+        fillLast(200);
         list.print();
-        removeFromEnd(900);
+        removeFromEnd(190);
         list.print();
+        time.endTimer();
+        time.clearTimer();
 
     }
 
     @Test
     public void testRemoveFirst() {
+        time.startTimer();
         makeList();
         fillFirst(8);
         list.print();
@@ -62,6 +68,8 @@ public class TestAList {
         list.print();
         fillFirst(2);
         list.print();
+        time.endTimer();
+        time.clearTimer();
 
     }
 

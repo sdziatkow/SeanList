@@ -14,14 +14,15 @@ public class GenericAList<Item> implements SeanList<Item> {
     private Item[] items;
     private int size;
     private int offset;
+    private final int DEFAULT_SIZE = 2;
     private final int RFACTOR = 2;
-    private final double SHRINK_RATIO = 0.25;
-    private final double GROW_RATIO = 0.75;
+    private final double SHRINK_RATIO = 0.50;
+    private final double GROW_RATIO = 0.95;
 
     public GenericAList() {
-        items = (Item[]) new Object[100];
+        items = (Item[]) new Object[DEFAULT_SIZE];
         size = 0;
-        offset = 50;
+        offset = DEFAULT_SIZE / RFACTOR;
     }
 
 //IMPLEMENTATION---------------------------------------------------------------------------------------------------------
