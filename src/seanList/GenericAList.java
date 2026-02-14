@@ -1,81 +1,97 @@
 package seanList;
 
-public class GenericAList<Item> implements SeanList<Item>{
-
+/** GenericAList.java
+ * FIELDS:
+ *  items        - Array object used to store Item objects.
+ *  size         - The total amount of items being kept track of in the array. When size == items.length, MUST resize.
+ *  offset       - The index of the first item being kept track of in the array. When zero, MUST resize.
+ *  RFACTOR      - The factor by which items.length is resized by.
+ *  SHRINK_RATIO - The useageRatio() at which items.length should be sized down.
+ *  GROW_RATIO   - The useageRatio() at which items.length should be sized up.
+ */
+public class GenericAList<Item> implements SeanList<Item> {
     private Item[] items;
     private int size;
+    private int offset;
     private final int RFACTOR = 2;
+    private final double SHRINK_RATIO = 0.25;
+    private final double GROW_RATIO = 0.75;
 
     public GenericAList() {
-        items = (Item[]) new Object[100];
+        items = (Item[]) new Object[10];
         size = 0;
+        offset = 4;
     }
 
 //IMPLEMENTATION---------------------------------------------------------------------------------------------------------
 
+
     @Override
     public void addFirst(Item x) {
-        Item[] a = (Item[]) new Object[size + 1];
-        a[0] = x;
-        System.arraycopy(items, 0, a, 1, size);
-        items = a;
+
+        // When adding from the beginning, must decrement offset to push back beginning of list.
+        if (shouldGrow()) grow();
+        --offset;
+        items[offset] = x;
         ++size;
     }
 
     @Override
     public void addLast(Item x) {
-        if (size == items.length) {
-            resize(size * RFACTOR);
-        }
-        items[size] = x;
+        if (shouldGrow()) grow();
+        items[offset + size] = x;
         ++size;
     }
 
     @Override
     public Item getFirst() {
-        return items[0];
+        return items[offset];
     }
 
     @Override
     public Item getLast() {
-        return items[size - 1];
+        return items[offset + size - 1];
     }
 
     @Override
     public Item get(int i) {
         validateIdx(i);
-        return items[i];
+        return items[offset + i];
     }
-    
+
     @Override
     public Item removeLast() {
         Item last = getLast();
         items[size - 1] = null;
         size -= 1;
+        if (shouldShrink()) shrink();
         return last;
     }
 
     @Override
     public void insert(Item x, int pos) {
-
         validateIdx(pos);
-        // Create new array with an extra spot.
-        Item[] a = (Item[]) new Object[size + 1];
 
-        // Copy from items (0, pos] to a[]
-        System.arraycopy(items, 0, a, 0, pos);
-        a[pos] = x;
+        // Create new array of same size as items.
+        Item[] a = (Item[]) new Object[items.length];
 
-        // Copy from items (pos, size - pos] to a[].
-        System.arraycopy(items, pos, a,  pos + 1, size - pos);
-        items = a;
+        // Copy from items [0, pos) to a[]
+        System.arraycopy(items, offset, a, offset, pos);
+
+        // Add new item to end of current list.
+        if (shouldGrow()) grow();
+        a[offset + pos] = x;
         ++size;
+
+        // Copy rest of list | from items [offset + pos, size - pos) to a[].
+        System.arraycopy(items, offset + pos, a,  offset + pos + 1, size - pos);
+        items = a;
     }
 
     @Override
     public void replace(Item x, int pos) {
         validateIdx(pos);
-        items[pos] = x;
+        items[offset + pos] = x;
     }
 
     @Override
@@ -85,20 +101,43 @@ public class GenericAList<Item> implements SeanList<Item>{
 
 //ALLIST-SPECIFIC--------------------------------------------------------------------------------------------------------
 
-    /** */
+    /** This method will resize items to have a length of the given capacity. */
     private void resize(int capacity) {
+        int oldOffset = offset;
+        offset = capacity / RFACTOR;
         Item[] a = (Item[]) new Object[capacity];
-        System.arraycopy(items, 0, a, 0, size);
+        System.arraycopy(items, oldOffset, a, offset, size);
         items = a;
     }
 
-    private void shrink() {
-
+    /** This method will resize items to be the product of size and RFACTOR. */
+    private void grow() {
+        resize(items.length * RFACTOR);
     }
 
-    private boolean shouldShrink() {
+    /** This method will resize items to be its current length over RFACTOR. */
+    private void shrink() {
+        resize(items.length / RFACTOR);
+    }
 
-        return true;
+    /** @returns: Ratio of size to items.length */
+    private double usageRatio() {
+        return ((double)size / (items.length / RFACTOR));
+    }
+
+    /** @returns: Ratio of offset to items.length */
+    private double offsetRatio() {
+        return ((double)offset / (items.length / RFACTOR));
+    }
+
+    /** @returns: True if useageRatio() equals one. */
+    private boolean shouldGrow() {
+        return (usageRatio() > GROW_RATIO || offsetRatio() < (1.0 - GROW_RATIO));
+    }
+
+    /** @returns: True if useageRatio() < SHRINK_RATIO */
+    private boolean shouldShrink() {
+        return (usageRatio() < SHRINK_RATIO);
     }
 
 }
