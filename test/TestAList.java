@@ -2,7 +2,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 import seanList.GenericAList;
-import seanList.GenericSList;
 import seanList.SeanList;
 
 public class TestAList {
@@ -22,6 +21,11 @@ public class TestAList {
             list.addLast(i);
         }
     }
+    private void removeFromStart(int amnt) {
+        for (int i = 0; i < amnt; ++i) {
+            list.removeFirst();
+        }
+    }
     private void removeFromEnd(int amnt) {
         for (int i = 0; i < amnt; ++i) {
             list.removeLast();
@@ -31,16 +35,32 @@ public class TestAList {
     @Test
     public void testAddFirst() {
         makeList();
-        fillLast(1);
-        list.print();
         fillFirst(1);
+        list.print();
+        fillLast(1);
         list.print();
     }
 
     @Test
     public void testShrink() {
         makeList();
-        fillLast(1000000);
+        fillLast(1000);
+        list.print();
+        removeFromEnd(900);
+        list.print();
+
+    }
+
+    @Test
+    public void testRemoveFirst() {
+        makeList();
+        fillFirst(8);
+        list.print();
+        removeFromStart(3);
+        list.print();
+        fillLast(3);
+        list.print();
+        fillFirst(2);
         list.print();
 
     }

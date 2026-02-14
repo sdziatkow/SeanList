@@ -85,4 +85,24 @@ public class TestList {
         list.print();
         assertEquals(exp, act);
     }
+
+    @Test
+    public void testRemoveFirst() {
+        makeListAddLast();
+        list.print();
+        int exp = 0;
+        int act = list.removeFirst();
+        list.print();
+        assertEquals(exp, act);
+    }
+
+    @Test
+    public void testRemove() {
+        makeListAddLast();
+        list.print();
+        int exp = 5;
+        int act = list.remove(5);
+        list.print();
+        assertEquals(exp, act);
+    }
 }

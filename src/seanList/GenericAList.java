@@ -1,3 +1,4 @@
+
 package seanList;
 
 /** GenericAList.java
@@ -7,7 +8,7 @@ package seanList;
  *  offset       - The index of the first item being kept track of in the array. When zero, MUST resize.
  *  RFACTOR      - The factor by which items.length is resized by.
  *  SHRINK_RATIO - The useageRatio() at which items.length should be sized down.
- *  GROW_RATIO   - The useageRatio() at which items.length should be sized up.
+ *  GROW_RATIO   - The useageRatio() or offsetRatio() at which items.length should be sized up.
  */
 public class GenericAList<Item> implements SeanList<Item> {
     private Item[] items;
@@ -18,9 +19,9 @@ public class GenericAList<Item> implements SeanList<Item> {
     private final double GROW_RATIO = 0.75;
 
     public GenericAList() {
-        items = (Item[]) new Object[10];
+        items = (Item[]) new Object[100];
         size = 0;
-        offset = 4;
+        offset = 50;
     }
 
 //IMPLEMENTATION---------------------------------------------------------------------------------------------------------
@@ -60,12 +61,41 @@ public class GenericAList<Item> implements SeanList<Item> {
     }
 
     @Override
+    public Item removeFirst() {
+        Item first = getFirst();
+        items[offset] = null;
+        ++offset;
+        --size;
+        if (shouldShrink()) shrink();
+        return first;
+    }
+
+    @Override
     public Item removeLast() {
         Item last = getLast();
         items[size - 1] = null;
-        size -= 1;
+        --size;
         if (shouldShrink()) shrink();
         return last;
+    }
+
+    @Override
+    public Item remove(int i) {
+        validateIdx(i);
+        Item item = get(i);
+
+        // Create new array of same size as items.
+        Item[] a = (Item[]) new Object[items.length];
+
+        // Copy from items [0, i) to a[]
+        System.arraycopy(items, offset, a, offset, i);
+
+        // Copy rest of list excluding i | from items [offset + pos + i, size - pos) to a[].
+        System.arraycopy(items, offset + i + 1, a,  offset + i, size - i);
+        items = a;
+        --size;
+        if (shouldShrink()) shrink();
+        return item;
     }
 
     @Override

@@ -82,7 +82,16 @@ public class GenericSList<Item> implements SeanList<Item> {
 
     @Override
     public Item get(int i) {
+        validateIdx(i);
         return getNode(i).item;
+    }
+
+    @Override
+    public Item removeFirst() {
+        Node first = sentinel.next;
+        sentinel.next = first.next;
+        --size;
+        return first.item;
     }
 
     @Override
@@ -92,6 +101,15 @@ public class GenericSList<Item> implements SeanList<Item> {
         last.next = null;
         --size;
         return lastItem;
+    }
+
+    @Override
+    public Item remove(int i) {
+        Node n = getNode(i - 1);
+        Item item = n.next.item;
+        n.next = n.next.next;
+        --size;
+        return item;
     }
 
     @Override

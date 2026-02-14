@@ -17,8 +17,14 @@ public interface SeanList<Item> {
     /** @return: The Item at the given index. */
     Item get(int i);
 
+    /** @return: The first Item in the list which is now removed. */
+    Item removeFirst();
+
     /** @return: The last Item in the list which is now removed. */
     Item removeLast();
+
+    /** @return: The Item at given index which is now removed. */
+    Item remove(int i);
 
     /** Inserts given x at given pos. */
     void insert(Item x, int pos);
