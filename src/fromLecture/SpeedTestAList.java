@@ -4,6 +4,8 @@ import seanList.GenericAList;
 import seanList.SeanList;
 import time.Timer;
 
+import java.util.ArrayList;
+
 public class SpeedTestAList {
     public static void main(String[] args) {
         Timer time = new Timer();
@@ -12,7 +14,7 @@ public class SpeedTestAList {
         SeanList<Integer> L = new GenericAList<>();
         int i = 0;
         while (i < 10000000) {
-            L.addLast(i);
+            L.addFirst(i);
             i = i + 1;
         }
 

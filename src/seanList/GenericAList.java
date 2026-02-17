@@ -1,5 +1,5 @@
-
 package seanList;
+import java.util.Iterator;
 
 /** GenericAList.java
  * FIELDS:
@@ -10,7 +10,27 @@ package seanList;
  *  SHRINK_RATIO - The useageRatio() at which items.length should be sized down.
  *  GROW_RATIO   - The useageRatio() or offsetRatio() at which items.length should be sized up.
  */
-public class GenericAList<Item> implements SeanList<Item> {
+public class GenericAList<Item> implements SeanList<Item>, Iterable<Item> {
+
+    /** Shorthand for - loop implementation. */
+    public Iterator<Item> iterator(){return new AListIterator();}
+    private class AListIterator implements Iterator<Item> {
+        private int pos;
+        public AListIterator() {
+            pos = offset;
+        }
+        public boolean hasNext() {
+            return pos < (offset + size);
+        }
+        public Item next() {
+            Item i = items[pos];
+            ++pos;
+            return i;
+        }
+    }
+
+//CONSTRUCTOR------------------------------------------------------------------------------------------------------------
+
     private Item[] items;
     private int size;
     private int offset;
@@ -26,7 +46,6 @@ public class GenericAList<Item> implements SeanList<Item> {
     }
 
 //IMPLEMENTATION---------------------------------------------------------------------------------------------------------
-
 
     @Override
     public void addFirst(Item x) {
@@ -161,7 +180,7 @@ public class GenericAList<Item> implements SeanList<Item> {
         return ((double)offset / (items.length / RFACTOR));
     }
 
-    /** @returns: True if useageRatio() equals one. */
+    /** @returns: True if useageRatio() > GROW_RATIO or offsetRatio < 1.0 - GROW_RATIO. */
     private boolean shouldGrow() {
         return (usageRatio() > GROW_RATIO || offsetRatio() < (1.0 - GROW_RATIO));
     }

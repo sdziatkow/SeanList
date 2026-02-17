@@ -5,10 +5,12 @@ import seanList.GenericAList;
 import seanList.SeanList;
 import time.Timer;
 
+import java.util.Iterator;
+
 public class TestAList {
 
     private Timer time = new Timer();
-    private SeanList<Integer> list;
+    private GenericAList<Integer> list;
 
     private void makeList() {
         list = new GenericAList<>();
@@ -47,9 +49,9 @@ public class TestAList {
     public void testShrink() {
         time.startTimer();
         makeList();
-        fillLast(200);
+        fillLast(1000);
         list.print();
-        removeFromEnd(190);
+        removeFromEnd(990);
         list.print();
         time.endTimer();
         time.clearTimer();
@@ -70,6 +72,15 @@ public class TestAList {
         list.print();
         time.endTimer();
         time.clearTimer();
+    }
+
+    @Test
+    public void testIteration() {
+        makeList();
+        fillFirst(10);
+        for (int i: list) {
+            System.out.println(i);
+        }
 
     }
 
