@@ -48,9 +48,7 @@ public class GenericSList<Item> implements SeanList<Item> {
      * @return The Node object at the given index i.
      */
     private Node getNode(int i) {
-        if (i >= size) {
-            throw new IllegalArgumentException("Given index is out of bounds size " + size);
-        }
+        validateIdx(i);
         Node x = sentinel.next;
         for (int n = 0; n < i; ++n) {
             x = x.next;

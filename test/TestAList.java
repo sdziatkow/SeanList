@@ -79,7 +79,8 @@ public class TestAList {
         makeList();
         fillFirst(10);
         for (int i: list) {
-            System.out.println(i);
+            System.out.print(i + " | ");
+            System.out.println();
         }
 
     }

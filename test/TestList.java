@@ -11,7 +11,7 @@ public class TestList {
     public enum ListType {AL, SLL};
     private SeanList<Integer> list;
 
-    private final ListType TYPE = ListType.AL;
+    private final ListType TYPE = ListType.SLL;
     private void makeListAddFirst() {
         switch (TYPE) {
             case AL: list = new GenericAList<>();
