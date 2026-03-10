@@ -4,6 +4,7 @@ public class CircAList<T> {
 
     private final int DEFAULT_CAPACITY = 20;
     private final int DEFAULT_START = DEFAULT_CAPACITY / 2;
+    private final int RFACTOR = 2;
     private int capacity;
     private int size;
     private int first;
@@ -11,15 +12,14 @@ public class CircAList<T> {
     private T[] items;
 
     public CircAList() {
-        capacity = DEFAULT_CAPACITY;
-        items = (T[]) new Object[capacity];
+        items = (T[]) new Object[DEFAULT_CAPACITY];
+        capacity = items.length;
         size = 0;
         first = DEFAULT_START;
         last = first + 1;
     }
 
-    private int nextFirst() { return (first - 1 + capacity) % capacity; }
-    private int nextLast() { return (last + 1) % capacity; }
+//IMPLEMENTATION---------------------------------------------------------------------------------------------------------
 
     public void addFirst(T x) {
         items[first] = x;
@@ -32,26 +32,30 @@ public class CircAList<T> {
         ++size;
     }
 
-    public T remove(int idx) {
-        T item = items[first + idx];
-        items[first + idx] = null;
-        return item;
-    }
     public T removeFirst() {
-        T item = items[first];
-        items[first] = null;
-        --size;
+        T item = getFirst();
+        items[prevFirst()] = null;
+        first = prevFirst();
         return item;
     }
     public T removeLast() {
-        T item = items[last];
-        items[last] = null;
-        --size;
+        T item = getLast();
+        items[prevLast()] = null;
+        last = prevLast();
         return item;
     }
 
-    public T getFirst() { return items[first]; }
-    public T getLast() { return items[last]; }
+    public T getFirst() { return items[prevFirst()]; }
+    public T getLast() { return items[prevLast()]; }
     public int size() { return size; }
 
+//ALIST-SPECIFIC---------------------------------------------------------------------------------------------------------
+
+    private int nextFirst() { return (first - 1 + capacity) % capacity; }
+    private int prevFirst() { return (first + 1) % capacity; }
+
+    private int nextLast() { return (last + 1) % capacity; }
+    private int prevLast() { return (last - 1 + capacity) % capacity; }
+
+    private boolean shouldGrow() { return (size == capacity); }
 }

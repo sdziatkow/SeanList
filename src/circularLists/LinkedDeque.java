@@ -36,7 +36,6 @@ public class LinkedDeque<T> {
         sentinel.next = first; // Double link (sentinel -> newFirst)
         ++size;
     }
-
     public void addLast(T x) {
         Node last = new Node(x, sentinel.prev, sentinel); // Single link (currLast <- newLast -> sentinel)
         sentinel.prev.next = last; // Double link (currLast -> newLast)
@@ -52,7 +51,6 @@ public class LinkedDeque<T> {
         --size;
         return first.item;
     }
-
     public T removeLast() {
         if (size == 0) return null;
 
@@ -71,7 +69,7 @@ public class LinkedDeque<T> {
     @Override
     public String toString() {
         StringBuilder out = new StringBuilder("[");
-        for (Node n = sentinel.next; n.item != null; n = n.next) {
+        for (Node n = sentinel.next; n.item != null; n = n.next) { // n.next/.prev will never be null, must check .item
             out.append(n.item);
 
             if (n.next.item != null) {

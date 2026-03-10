@@ -1,39 +1,65 @@
 package structures;
 
+/**
+ * FIFO - FIRST IN, FIRST OUT.
+ * @param <T>: Type of Object to be stored.
+ */
 public class Queue<T> {
-    private class Node {
-        T item;
-        Node next;
-        public Node(T i, Node n) {
-            item = i;
-            next = n;
+
+    private final Stack<T> IN_STACK;
+    private final Stack<T> OUT_STACK;
+
+    public Queue() {
+        IN_STACK = new Stack<>();
+        OUT_STACK = new Stack<>();
+    }
+
+    /** Transfer contents of OUT_STACK to IN_STACK, reversing the order of the elements. */
+    private void updateInStack() {
+        while (!OUT_STACK.isEmpty()) {
+            IN_STACK.push(OUT_STACK.pop());
         }
     }
 
-    private int size;
-    private Node sentinel;
-
-    public Queue() {
-        sentinel = new Node(null, null);
+    /** Transfer contents of IN_STACK to OUT_STACK, reversing the order of the elements. */
+    private void updateOutStack() {
+        while (!IN_STACK.isEmpty()) {
+            OUT_STACK.push(IN_STACK.pop());
+        }
     }
 
-    /** add to back of queue **/
+    /**
+     * This method will add the given Object to the end of the queue.
+     * @param x: Object to be added.
+     */
     public void enqueue(T x) {
-        Node last;
-        for (last = sentinel; last.next != null; last = last.next);
-        last.next = new Node(x, null);
-        ++size;
+        updateInStack();
+        IN_STACK.push(x);
     }
 
-    /** remove from front of queue **/
+    /**
+     * This method will REMOVE and RETURN the Object at the beginning of the Queue.
+     * @Return: The Object at the beginning of the Queue.
+     */
     public T dequeue() {
-        Node first = sentinel.next;
-        sentinel.next = first.next;
-        --size;
-        return first.item;
+        updateOutStack();
+        return OUT_STACK.pop();
     }
 
+    /** @Return: The Object at the beginning of the Queue. */
     public T peek() {
-        return sentinel.next.item;
+        updateOutStack();
+        return OUT_STACK.peek();
+    }
+
+    /** @Return: True if the Queue contains no Objects. */
+    public boolean isEmpty() {
+        return (IN_STACK.isEmpty() && OUT_STACK.isEmpty());
+    }
+
+    @Override
+    public String toString() {
+        updateOutStack();
+        return OUT_STACK.toString();
     }
 }

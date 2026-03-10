@@ -1,9 +1,8 @@
 package structures;
 
 /**
- * Stack: A collection of elements in which only the first element is manipulated.
- * LAST IN, FIRST OUT.
- *
+ * LIFO - LAST IN, FIRST OUT.
+ * @param <T>: The type of Object to be stored.
  */
 public class Stack<T> {
     private class Node {
@@ -15,12 +14,9 @@ public class Stack<T> {
         }
     }
 
-    private int size;
-    private Node sentinel;
-
+    private final Node TOP;
     public Stack() {
-        sentinel = new Node(null, null);
-        size = 0;
+        TOP = new Node(null, null);
     }
 
     /**
@@ -28,8 +24,7 @@ public class Stack<T> {
      * @param x: The item to be added.
      */
     public void push(T x) {
-        sentinel.next = new Node(x, sentinel.next);
-        ++size;
+        TOP.next = new Node(x, TOP.next);
     }
 
     /**
@@ -37,19 +32,14 @@ public class Stack<T> {
      * @return: The first item in the stack.
      */
     public T pop() {
-        Node first = sentinel.next;
-        sentinel.next = first.next;
-        --size;
+        Node first = TOP.next;
+        TOP.next = first.next;
         return first.item;
     }
 
     /** @return: The first item in the stack. */
-    public T peek() {
-        return sentinel.next.item;
-    }
-    public boolean isEmpty() {
-        return size == 0;
-    }
+    public T peek() { return TOP.next.item; }
+    public boolean isEmpty() { return TOP.next == null; }
 
     /**
      * @param x: The element to be searched for.
@@ -57,13 +47,26 @@ public class Stack<T> {
      */
     public int search(T x) {
         int dist = 0;
-        for (Node n = sentinel.next; n != null; n = n.next) {
+        for (Node n = TOP.next; n != null; n = n.next) {
             if (n.item.equals(x)) {
                 return dist;
             }
             ++dist;
         }
         return -1;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder out = new StringBuilder("[");
+        for (Node n = TOP.next; n != null; n = n.next) {
+            out.append(n.item);
+            if (n.next != null) {
+                out.append(", ");
+            }
+        }
+        out.append("]");
+        return out.toString();
     }
 
 }

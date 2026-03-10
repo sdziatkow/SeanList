@@ -4,7 +4,7 @@ import circularLists.CircAList;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
-public class testCircAList {
+public class TestCircAList {
     private CircAList<Integer> l = new CircAList<>();
 
     @Test
@@ -12,10 +12,19 @@ public class testCircAList {
         for (int i = 0; i < 10; ++i) {
             l.addFirst(i);
         }
-        for (int i = 0; i < 10; ++i) {
-            l.addLast(i + 10);
-        }
+        System.out.println(l.getLast());
         System.out.println();
+    }
+
+    @Test
+    public void testRemove() {
+        for (int i = 0; i < 15; ++i) {
+            l.addFirst(i);
+        }
+        Integer e = 0;
+        assertEquals(e, l.removeLast());
+        e = 14;
+        assertEquals(e, l.removeFirst());
     }
 
 

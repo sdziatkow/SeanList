@@ -4,7 +4,7 @@ import structures.Stack;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
-public class testStack {
+public class TestStack {
     private Stack<Integer> s = new Stack<>();
 
     @Test
@@ -40,5 +40,14 @@ public class testStack {
         e = 2;
         a = s.search(1);
         assertEquals(e, a);
+    }
+
+    @Test
+    public void testToString() {
+        s.push(1);
+        s.push(2);
+        s.push(3);
+        String e = "[3, 2, 1]";
+        assertEquals(e, s.toString());
     }
 }

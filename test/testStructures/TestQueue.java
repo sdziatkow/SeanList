@@ -1,11 +1,10 @@
 package testStructures;
 
 import structures.Queue;
-import structures.Stack;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
-public class testQueue {
+public class TestQueue {
     private Queue<Integer> q = new Queue<>();
 
     @Test
@@ -13,9 +12,8 @@ public class testQueue {
         q.enqueue(1);
         q.enqueue(2);
         q.enqueue(3);
-        Integer e = 1;
-        Integer a = q.peek();
-        assertEquals(e, a);
+        String e = "[1, 2, 3]";
+        assertEquals(e, q.toString());
     }
 
     @Test
